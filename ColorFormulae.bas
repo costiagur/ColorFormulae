@@ -10,7 +10,7 @@ Dim i As Integer
 Dim midstr As String, listtxt as string
 
 Set regex = CreateObject("VBScript.RegExp")
-regex.Pattern = "[^a-zA-Z0-9!$@#,:\[\]_]"
+regex.Pattern = "[^a-zA-Z0-9!$#(\[#Totals\],)(@[\s??):\[\]_]"
 regex.Global = True
 
 For Each selectedcell In Selection
