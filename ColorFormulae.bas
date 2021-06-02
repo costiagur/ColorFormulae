@@ -7,7 +7,7 @@ Dim regex As Object, rangeobj As Object, selectedcell, hasformula As Boolean
 Dim indcol As New Collection
 Dim operators As Object, operator
 Dim i As Integer
-Dim midstr As String
+Dim midstr As String, listtxt as string
 
 Set regex = CreateObject("VBScript.RegExp")
 regex.Pattern = "[^a-zA-Z0-9à-ú!$@:\[\]_]"
@@ -29,6 +29,11 @@ For Each selectedcell In Selection
     For i = 1 To indcol.Count - 1
         midstr = Mid(selectedcell.Formula, indcol(i) + 2, indcol(i + 1) - indcol(i) - 1)
         
+        If InStr(1, midstr, "[@") > 0 Then 'if reference is part of list
+            listtxt = Replace(midstr, "@", "[#Headers],[") & "]" 'get address of the table header above the referenced cell
+            midstr = Range(listtxt).Offset(analyzed_cell.Row() - Range(listtxt).Row(), 0).Address 'get the address relative to the analyzed cell        
+        End If
+                    
         On Error Resume Next
             Set rangeobj = Range(midstr) 'in case of error, will return Nothing or previous value (which is set to nothing in code below)
             
