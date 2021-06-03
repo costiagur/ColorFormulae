@@ -30,7 +30,7 @@ For Each selectedcell In Selection
         midstr = Mid(selectedcell.Formula, indcol(i) + 2, indcol(i + 1) - indcol(i) - 1)
         
         If InStr(1, midstr, "[@") > 0 Then 'if reference is part of list
-            listtxt = Replace(midstr, "@", "[#Headers],[") & "]" 'get address of the table header above the referenced cell
+            listtxt = Replace(midstr, "@", "[#Headers],") 'get address of the table header above the referenced cell
             midstr = Range(listtxt).Offset(selectedcell.Row() - Range(listtxt).Row(), 0).Address 'get the address relative to the analyzed cell        
         End If
                     
