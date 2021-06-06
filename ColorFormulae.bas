@@ -10,7 +10,7 @@ Dim i As Integer
 Dim midstr As String, listtxt as string
 
 Set regex = CreateObject("VBScript.RegExp")
-regex.Pattern = "[\+\-=/\*\(\)]"
+regex.Pattern = "[\+\-=/\*\(\),]"
 regex.Global = True
 
 For Each selectedcell In Selection
