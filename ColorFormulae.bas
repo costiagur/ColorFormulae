@@ -32,6 +32,12 @@ For Each selectedcell In Selection
         If InStr(1, midstr, "[@") > 0 Then 'if reference is part of list
             listtxt = Replace(midstr, "@", "[#Headers],") 'get address of the table header above the referenced cell
             midstr = Range(listtxt).Offset(selectedcell.Row() - Range(listtxt).Row(), 0).Address 'get the address relative to the analyzed cell        
+            
+            If InStr(1, midstr, "[@") > 0 Then 'if cell with formula is insite the list, lists name doesn't appear
+                listtxt = Replace(midstr, "[@", selectedcell.ListObject.Name & "[[#Headers],[") 'get address of the table header above the referenced cell
+                listtxt = listtxt & "]"
+                midstr = Range(listtxt).Offset(selectedcell.Row() - Range(listtxt).Row(), 0).Address
+            End If        
         End If
                     
         On Error Resume Next
