@@ -10,7 +10,7 @@ Dim i As Integer
 Dim midstr As String, listtxt as string
 
 Set regex = CreateObject("VBScript.RegExp")
-regex.Pattern = "[\+\-=/\*\(\),]"
+regex.Pattern = "[\+\-=/\*\(\),<>]"
 regex.Global = True
 
 For Each selectedcell In Selection
@@ -30,14 +30,15 @@ For Each selectedcell In Selection
         midstr = Mid(selectedcell.Formula, indcol(i) + 2, indcol(i + 1) - indcol(i) - 1)
         
         If InStr(1, midstr, "[@") > 0 Then 'if reference is part of list
-            listtxt = Replace(midstr, "@", "[#Headers],") 'get address of the table header above the referenced cell
-            midstr = Range(listtxt).Offset(selectedcell.Row() - Range(listtxt).Row(), 0).Address 'get the address relative to the analyzed cell        
+                        If selectedcell.ListObject Is Nothing Then 'if selected cell is outside of the list object
+                listtxt = Replace(midstr, "@", "[#Headers],") 'get address of the table header above the referenced cell
+            Else 'if cell with formula is inside the list, lists name doesn't appear
+                listtxt = Replace(midstr, "[@", selectedcell.ListObject.Name & "[[#Headers],") 'get address of the table header above the referenced cell
             
-            If InStr(1, midstr, "[@") > 0 Then 'if cell with formula is insite the list, lists name doesn't appear
-                listtxt = Replace(midstr, "[@", selectedcell.ListObject.Name & "[[#Headers],[") 'get address of the table header above the referenced cell
-                listtxt = listtxt & "]"
-                midstr = Range(listtxt).Offset(selectedcell.Row() - Range(listtxt).Row(), 0).Address
-            End If        
+            End If
+            
+            midstr = Range(listtxt).Offset(selectedcell.Row() - Range(listtxt).Row(), 0).Address 'get the address relative to the analyzed cell
+ 
         End If
                     
         On Error Resume Next
