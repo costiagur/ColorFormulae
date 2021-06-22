@@ -1,5 +1,5 @@
 # ColorFormulae
-Color fonts of cells with constants in red and cells with formulae in blue in Excel. For Example:
+Change cells' font colors to Red and Blue, where fixed text or numbers or formulas consisting of fixed values are colored to Red and formulas with refernces are colored to Blue. For Example:
 
 
 
