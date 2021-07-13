@@ -10,7 +10,7 @@ Dim i As Integer
 Dim midstr As String, listtxt as string
 
 Set regex = CreateObject("VBScript.RegExp")
-regex.Pattern = "[\+\-=/\*\(\),<>]"
+regex.Pattern = "[\+\-=/\*\(\),<>&]"
 regex.Global = True
 
 For Each selectedcell In Selection
@@ -39,6 +39,17 @@ For Each selectedcell In Selection
             
             midstr = Range(listtxt).Offset(selectedcell.Row() - Range(listtxt).Row(), 0).Address 'get the address relative to the analyzed cell
  
+        End If
+
+        If InStr(1, midstr, "[#Totals]") > 0 Then 'if reference is part of totals of the list
+            j = InStr(indcol(i) + 1, selectedcell.Formula, "]]")
+            midstr = Mid(selectedcell.Formula, indcol(i) + 1, j - indcol(i) + 1)
+            midstr = Trim(Mid(midstr, 2, Len(midstr) - 1))
+    
+            midstr = Range(midstr).Address
+            
+            i = i + 1 'move i forward to skip next [
+    
         End If
                     
         On Error Resume Next
